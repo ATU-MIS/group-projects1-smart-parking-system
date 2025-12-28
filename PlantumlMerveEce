@@ -1,0 +1,43 @@
+sequenceDiagram
+    actor Driver
+    actor Admin
+    participant System
+    participant ParkingManagement
+    participant ParkingSpot
+    participant Reservation
+    participant Payment
+
+    rect rgb(200, 150, 255)
+    note right of Driver: Park Yeri Arama
+    Driver ->> System : searchParking()
+    System ->> ParkingManagement : getAvailableSpots()
+    ParkingManagement ->> ParkingSpot : checkAvailability()
+    ParkingSpot -->> ParkingManagement : available spots
+    ParkingManagement -->> System : spot list
+    System -->> Driver : display spots
+    end
+
+    rect rgb(200, 150, 255)
+    note right of Driver: Park Yeri Rezervasyonu
+    Driver ->> System : reserveSpot(spotID)
+    System ->> ParkingSpot : updateStatus(false)
+    System ->> Reservation : create()
+    Reservation -->> System : reservationID
+    System -->> Driver : reservation confirmed
+    end
+
+    rect rgb(200, 150, 255)
+    note right of Driver: Ödeme
+    Driver ->> System : makePayment(amount)
+    System ->> Payment : processPayment()
+    Payment -->> System : payment success
+    System -->> Driver : payment confirmation
+    end
+
+    rect rgb(200, 150, 255)
+    note right of Admin: Admin Park Yönetimi
+    Admin ->> System : add/update/removeSpot()
+    System ->> ParkingManagement : manageSpot()
+    ParkingManagement -->> System : success
+    System -->> Admin : confirmation
+    end
